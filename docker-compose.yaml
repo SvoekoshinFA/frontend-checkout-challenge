@@ -1,0 +1,12 @@
+services:
+  checkout:
+    image: node:24-slim
+    environment:
+      HOST: 0.0.0.0
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/checkout
+    working_dir: /checkout
+    command: ["tail", "-f", "/dev/null"]
+    restart: "no"
