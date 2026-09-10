@@ -1,0 +1,38 @@
+nav {
+    background-color: rgba(128, 128, 128, 0.2);
+    padding: 0.5rem;
+}
+
+nav > ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+} 
+
+nav > ul > li {
+    list-style: none;
+}
+
+nav > ul > li > h2 {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    color: var(--text);
+}
+
+nav > ul > li > button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: var(--text);
+}
+
+nav > ul > li > button:hover {
+    text-decoration: underline;
+    color: var(--text-h);
+}
+
+nav > ul > li > button.active {
+    color: var(--accent) !important;
+}
