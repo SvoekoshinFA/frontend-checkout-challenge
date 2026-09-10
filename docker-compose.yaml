@@ -1,10 +1,11 @@
 services:
   checkout:
-    image: node:24-slim
+    image: node:24-bookworm
     environment:
       HOST: 0.0.0.0
     ports:
       - "4000:4000"
+      - "5173:5173"
     volumes:
       - .:/checkout
     working_dir: /checkout
