@@ -1,33 +1,44 @@
-import { Suspense, useState, useTransition, createContext } from 'react'
+import { Suspense, useState, useTransition, useEffect  } from 'react'
+import API from './helpers/API.ts'
 import CatalogPage from './pages/CatalogPage.tsx'
 import CartPage from './pages/CartPage.tsx'
 import FormPage from './pages/FormPage.tsx'
 import PaymentPage from './pages/PaymentPage.tsx'
 import Layout from './components/Layout.tsx'
 import BigSpinner from './components/BigSpinner.tsx'
+import { useSelector, useDispatch } from 'react-redux'
+import { setSession } from './store.ts'
+import type { RootState, AppDispatch } from './store.ts'
+import { useMutation } from '@tanstack/react-query'
 import type { Session } from './types/Session.ts'
 
-type GlobalContext = {
-  Session: Session | null;
-  setSession: (session: Session | null) => void;
-};
-
-export const Global = createContext<GlobalContext>({
-  Session: null,
-  setSession: () => {},
-});
-
 function App() {
-  const [session, setSession] = useState<Session | null>(null);
+  const session = useSelector((state: RootState) => state.session);
+  const dispatch = useDispatch<AppDispatch>();
+  const createSessionMutation = useMutation<Session, Error>({
+    mutationFn: API.postSessions,
+    onSuccess: (session) => {
+      dispatch(setSession(session));
+    },
+  });
+
+  useEffect(() => {
+    if (session || createSessionMutation.isPending) {
+      return;
+    }
+
+    createSessionMutation.mutate();
+  }, [session, createSessionMutation]);
+
+  if (!session) {
+    return <BigSpinner />;
+  }
 
   return (
-    <Global.Provider value={{ Session: session, setSession }}>
-      <Suspense fallback={<BigSpinner />}>
-        <Router />
-      </Suspense>
-    </Global.Provider>
+    <Suspense fallback={<BigSpinner />}>
+      <Router />
+    </Suspense>
   );
-
 }
 
 function Router() {

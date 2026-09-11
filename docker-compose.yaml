@@ -9,5 +9,5 @@ services:
     volumes:
       - .:/checkout
     working_dir: /checkout
-    command: ["tail", "-f", "/dev/null"]
+    command: ["npm", "run", "dev"]
     restart: "no"
